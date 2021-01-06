@@ -1,16 +1,20 @@
-# This is a sample Python script.
+import scipy.io
+import numpy as np
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+loaded = scipy.io.loadmat('FaceData.mat')
+mat: np.ndarray = loaded['FaceData']
+shape=mat.shape
+mat=mat.reshape((shape[0]*shape[1]))
+print(mat.shape)
+mat=np.asarray([m[0] for m in mat]) # remove parenthesis
+print(mat[0].shape)
+
+def compute_mean(mat):
+    m = 0
+    for col in mat:
+        m += np.mean(col)
+    return m / mat.shape[0]
+
+theta_0=(compute_mean(mat))
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
