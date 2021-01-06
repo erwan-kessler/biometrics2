@@ -7,6 +7,7 @@ shape = mat.shape
 mat = mat.flatten()
 print(mat.shape)
 image_shape=mat[0][0].shape
+d=image_shape[0]*image_shape[1]
 plt.imshow(mat[0][0])
 plt.show()
 print(image_shape)
@@ -39,7 +40,7 @@ cov = 1 / (n - 1) * np.dot(x_0.transpose(), x_0)
 print(cov.shape)
 eig_value, eig_vector = np.linalg.eig(cov)
 
-for i in range(10):
+for i in range(0):
     img=eig_vector[i].real+mat[i]
     plt.imshow(img.reshape(image_shape))
     plt.show()
@@ -49,3 +50,12 @@ for i in range(10):
     plt.show()
 
 
+
+import random
+
+m=random.randint(1,d)
+eig_temp=[(v.real,i) for i,v in enumerate(eig_value)]
+eig_temp.sort(key=lambda x:x[0],reverse=True)
+eig_temp=eig_temp[:m]
+eig_value_extracted=[eig_value[i] for v,i in eig_temp]
+print(len(eig_value_extracted),m)
