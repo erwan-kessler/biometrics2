@@ -74,8 +74,9 @@ plt.imshow(eigen_face[0,].real.reshape(image_shape))
 
 
 for i in range(2):
+    w=1
     plt.figure(4 + i * 3)
-    img = eigen_face[i,].real * 255 + matx[i]
+    img = w*eigen_face[i,].real * 255 + matx[i]
     plt.imshow(img.reshape(image_shape))
     plt.title("Addition of both")
 
@@ -97,7 +98,7 @@ for i in range(2):
 # Question 7
 import random
 
-m = random.randint(1, d)  # [1,d)
+
 
 
 def extract_m_largest(m):
@@ -110,7 +111,7 @@ def extract_m_largest(m):
     # extract phiM eigenvectors with the m largest eigenvalues
     eig_vector_extracted = [eig_vector[i] for _, i in eig_temp]
     print(len(eig_vector_extracted), m)
-    return eig_vector_extracted
+    return eig_vector_extracted,eig_temp
 
 
 # Question 3.3.1
@@ -119,6 +120,8 @@ from sklearn.model_selection import train_test_split
 data, labels = matx, range(len(matx))
 
 data_train, data_test, labels_train, labels_test = train_test_split(data, labels, test_size=0.5, random_state=42) \
+
+k=len(data_test)
 
 def v(_m):
     return sum(eig_value[:_m].real) / sum(eig_value.real)
@@ -134,4 +137,18 @@ plt.figure(16)
 plt.plot(range(500), v_m[:500])
 
 
+
+# 3.3.3
+m = random.randint(1, d)  # [1,d)
+# phi_value contains m first (eig_value,index) in order (highest to lowest)
+# phi list contains the m first eigen vectors
+phi_list,phi_value=extract_m_largest(m)
+
+for i in range(10):
+    plt.figure(20+i*2)
+    plt.imshow(phi_list[i].real.reshape(image_shape))
+    plt.figure(20 + i*2+1)
+    plt.imshow(matx[phi_value[i][1]].reshape(image_shape))
 plt.show()
+
+
