@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 import scipy.io
 import numpy as np
 import matplotlib.pyplot as plt
@@ -51,7 +53,7 @@ eig_value = eig[0]
 # print(eig_value)
 # print eigenvectors
 eig_vector = eig[1]
-print(eig_vector)
+#print(eig_vector)
 print(eig_vector.shape)
 
 # reshape vectors
@@ -112,7 +114,7 @@ from sklearn.model_selection import train_test_split
 
 data, labels = matx, range(len(matx))
 
-data_train, data_test, labels_train, labels_test = train_test_split(data, labels, test_size=0.5, random_state=42) \
+data_train, data_test, labels_train, labels_test = train_test_split(data, labels, test_size=0.5, random_state=42)
 
 k = len(data_test)
 
@@ -131,6 +133,8 @@ plt.plot(range(500), v_m[:500])
 
 # 3.3.3
 m = random.randint(1, d)  # [1,d)
+print("M value",m)
+m = 10
 # phi_value contains m first (eig_value,index) in order (highest to lowest)
 # phi list contains the m first eigen vectors
 phi_list, phi_value = extract_m_largest(m)
@@ -146,6 +150,20 @@ phi_m = np.asarray(phi_list)
 a_i_array = []
 # (400,2576)
 x_temp_0 = np.transpose(x_0)
+
+# sort according to the identities for easier manipulation
+d=defaultdict(list)
+for _data,_label in zip(data_test,labels_test):
+    d[int(_label/10)].append((_data,_label))
+
+
+data_test=[]
+labels_test=[]
+for identity in d.values():
+    for (_data,_label) in identity:
+        data_test.append(_data)
+        labels_test.append(_label)
+
 for x_i_test, test_index in zip(data_test, labels_test):
     a_i_test = np.dot(phi_m, x_temp_0[test_index])
     a_i_array.append(a_i_test)
@@ -176,5 +194,5 @@ with open("score_matrix.txt","w+") as file:
         file.write(" ".join([str(f) for f in row])+"\n")
 
 with open("id.txt","w+") as file:
-   file.write(" ".join([str(f) for f in range(len(score_matrix))])+"\n")
+    file.write(" ".join([str(int(ti/10)) for ti in labels_test])+"\n")
 plt.show()
